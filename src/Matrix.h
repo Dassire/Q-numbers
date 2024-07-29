@@ -105,9 +105,23 @@ public:
         return *this;
     }
 
+	Matrix<T> operator + (const Matrix<T>& oth) {
+		T* dat;
+		Matrix<T> r(oth);
+		int i;
+		if(m_m == oth.getM() && m_n == oth.getN()) {
+			dat = new T[m_m * m_n];
+			for(i = 0; i < m_m * m_n; i++) {
+				dat[i] = m_data[i] + oth.m_data[i];
+			}
+			r.m_data = dat;
+			return r;
+		}
+	}
+
     Matrix<T> operator * (const Matrix<T>& oth) {
         T* dat;
-        Matrix<T> r(oth);
+		Matrix<T> r(oth);
         if(m_n == oth.getM()) {
             dat = r.prod(this);
             r.m_m = m_n;

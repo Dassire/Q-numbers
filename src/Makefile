@@ -26,8 +26,5 @@ Rational.o: Rational.cpp Rational.h
 testRational: Rational.o PGCD.o testRational.c
 	$(CC) $(CFLAGS) -g -o testRational Rational.o PGCD.o testRational.c
 
-Matrix.o: Matrix.cpp Matrix.h
-	$(CC) $(GCC_FLAGS) -c Matrix.cpp
-
-testMatrix: Matrix.o Rational.o PGCD.o testMatrix.c
-	$(CC) $(CFLAGS) -g -o testMatrix Matrix.o Rational.o PGCD.o testMatrix.c
+testMatrix: Matrix.h testMatrix.cpp
+	$(CC) $(CFLAGS) -g -o testMatrix testMatrix.cpp
