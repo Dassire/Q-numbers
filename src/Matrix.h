@@ -1,50 +1,130 @@
-#ifndef MATRIX_X
-#define MATRIX_X
+#ifndef MATRIX_H_
+#define MATRIX_H_
 
-#include "Rational.h"
+/*
+#include <string>
 
-typedef int ErrCode;
-#define SIZE_ERROR 1
-#define ALLOC_ERROR 2;
+#include "Dim2Array.h"
 
+class Matric : Dim2Array<int>
+*/
+
+#include <string>
+
+typedef int index;
+
+template <class T>
 class Matrix {
-private:
-	Rational* m_tab;
-	unsigned m_m, m_n;
-	ErrCode m_lastErr;
+    private:
+    index m_m;
+    index m_n;
+    T* m_data;
+
+    T* prod(const Matrix<T>* oth) const {
+        int i,j,k;
+        T* r = new T[oth->getM() * m_n];
+        for(i = 0; i < oth->getM(); i++) {
+            for(j = 0; j < m_n; j++) {
+                r[i * oth->getM() + j]=0;
+                for(k=0;k<m_m;k++) {
+                    r[i * oth->getM() + j]+=oth->get(i,k)*get(k,j);
+                }
+            }
+        }
+        return r;
+    }
 
 public:
-	Matrix(int m, int n);
-	Matrix(int m, int n, Rational* val);
-	~Matrix();
+    Matrix(index m, index n) {
+        m_m=m;
+        m_n=n;
+        m_data=new T[m*n];
+    }
 
-	ErrCode getError() const;
-	ErrCode popError();
+    Matrix(index m, index n, T* data) {
+        m_m = m;
+        m_n = n;
+        m_data = data;
+    }
 
-	unsigned getM() const;
-	unsigned getN() const;
-	Rational getVal(unsigned i, unsigned j);
-	ErrCode setVal(const Rational&, unsigned i, unsigned j);
-	char* toString() const;
+    ~Matrix() {
+        delete[] m_data;
+    }
 
-	int cmp(const Matrix&) const;
+    T get(index i, index j) const {
+        if (i<m_m && j<m_n) {
+            return m_data[i * m_n + j];
+        } else {
+            exit(1);
+        }
+    }
 
-	Matrix* operator  = (const Matrix&);
-	Matrix* operator += (const Matrix&);
-	Matrix* operator -= (const Matrix&);
-	Matrix* operator *= (const Matrix&);
-	Matrix* operator /= (const Matrix&);
+    index getM() const { return m_m; }
+    index getN() const { return m_n; }
+
+    Matrix<T>& set(index i, index j, T val) {
+        m_data[i * m_n + j] = val;
+        return *this;
+    }
+
+    Matrix<T>& operator += (const Matrix<T>& oth) {
+        int i;
+        if(m_m == oth.getM() && m_n == oth.getN()) {
+            for(i=0; i<m_m * m_n; i++) {
+                index tmp = oth.m_data[i];
+                m_data[i]+=tmp;
+            }
+        } else {
+            exit(1);
+        }
+        return *this;
+    }
+
+    Matrix<T>& operator -= (const Matrix<T>& oth) {
+        int i;
+        if(m_m == oth.getM() && m_n == oth.getN()) {
+            for(i=0; i<m_m * m_n; i++) {
+                m_data[i]-=oth.m_data[i];
+            }
+        } else {
+            exit(1);
+        }
+        return *this;
+    }
+
+    Matrix<T>& operator *= (const Matrix<T>& oth) {
+        T* tmp;
+        if(m_n == oth.getM()) {
+            tmp = oth.prod(this);
+            delete[] m_data;
+            m_data = tmp;
+            m_n = oth.getN();
+        } else {
+            exit(1);
+        }
+        return *this;
+    }
+
+    Matrix<T> operator * (const Matrix<T>& oth) {
+        T* dat;
+        Matrix<T> r(oth);
+        if(m_n == oth.getM()) {
+            dat = r.prod(this);
+            r.m_m = m_n;
+            r.m_data = dat;
+            return r;
+        } else {
+            exit(1);
+        }
+    }
 };
 
 /*
-Matrix operator + (const Matrix&, const Matrix&);
-Matrix operator - (const Matrix&, const Matrix&);
-Matrix operator * (const Matrix&, const Matrix&);
-Matrix operator / (const Matrix&, const Matrix&);
+Matrix<T> operator + (const Matrix<T>& l, const Matrix<T>& r) {
+    index i=0;
+    T* data = new T[m_n]{ ([](index* i){l->}) };
+    return 0;
+}
 */
-
-int operator == (const Matrix&, const Matrix&);
-int operator != (const Matrix&, const Matrix&);
-
 
 #endif
