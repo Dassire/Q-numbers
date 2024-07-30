@@ -7,7 +7,7 @@
 
 char* intToString(int n) {
 	size_t size=2;
-	int tmp=n;
+	int tmp=abs(n);
 	char* r;
 	while(tmp>9) {
 		size++;
