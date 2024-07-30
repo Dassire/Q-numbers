@@ -11,6 +11,7 @@ class Matric : Dim2Array<int>
 
 #include <string>
 #include <string.h>
+#include <stdlib.h>
 
 typedef int idx;
 
@@ -187,7 +188,7 @@ public:
             if(k!=i) {
                 swap(i, k, buff);
                 if(oth) {
-                    oth.swap(i, k, buff);
+                    oth->swap(i, k, buff);
                 }
             }
             for(k=i + 1; k < m_m; k++) {
