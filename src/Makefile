@@ -3,7 +3,7 @@ CFLAGS = -Wno-unused-parameter -Wall -g
 CC = g++
 
 LIB = PGCD.o Rational.o IntMatrixUtils.o RationalMatrixUtils.o
-PROGRAMS = testRational testPGCD testMatrix testEchelon
+PROGRAMS = testRational testPGCD testMatrix testEchelon testEchelon2
 
 
 .PHONY:	all clean
@@ -37,3 +37,6 @@ testMatrix: Matrix.h testMatrix.cpp
 
 testEchelon: testEchelon.cpp Matrix.h IntMatrixUtils.o
 	$(CC) $(CFLAGS) -o testEchelon testEchelon.cpp IntMatrixUtils.o
+
+testEchelon2: testEchelon2.cpp Matrix.h RationalMatrixUtils.o Rational.o PGCD.o
+	$(CC) $(CFLAGS) -o testEchelon2 testEchelon2.cpp RationalMatrixUtils.o Rational.o PGCD.o

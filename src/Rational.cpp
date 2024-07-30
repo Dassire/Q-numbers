@@ -95,6 +95,10 @@ int Rational::cmp(const Rational& right) const {
 	return (lnum*(rden/gcd))-((lden/gcd)*rnum);
 }
 
+int Rational::cmp(long x) const {
+	return m_num - x * m_den;
+}
+
 Rational& Rational::add(const Rational& right) {
 	if(m_den!=right.m_den) { // can't be the same object
 		m_num=(m_num*right.m_den)+(m_den*right.m_num);
@@ -170,6 +174,27 @@ Rational& Rational::operator /= (const Rational& right) {
 	return *this;
 }
 
+Rational& Rational::operator  = (long oth) {
+	m_num = oth;
+	return *this;
+}
+Rational& Rational::operator += (long oth) {
+	m_num += oth * m_den;
+	return *this;
+}
+Rational& Rational::operator -= (long oth) {
+	m_num -= oth * m_den;
+	return *this;
+}
+Rational& Rational::operator *= (long oth) {
+	m_num *= oth;
+	return *this;
+}
+Rational& Rational::operator /= (long oth) {
+	m_den *= oth;
+	return *this;
+}
+
 Rational operator + (const Rational& left, const Rational& right) {
 	Rational r(left);
 	r.add(right);
@@ -216,4 +241,32 @@ int operator >  (const Rational& left, const Rational& right) {
 
 int operator >= (const Rational& left, const Rational& right) {
 	return left.cmp(right)>=0;
+}
+
+int operator == (const Rational& lhs, long rhs) {
+	return lhs.cmp(rhs) == 0;
+}
+
+int operator != (const Rational& lhs, long rhs) {
+	return lhs.cmp(rhs) != 0;
+}
+
+int operator <  (const Rational& lhs, long rhs) {
+	return lhs.cmp(rhs) < 0;
+}
+
+int operator <= (const Rational& lhs, long rhs) {
+	return lhs.cmp(rhs) <= 0;
+}
+
+int operator >  (const Rational& lhs, long rhs) {
+	return lhs.cmp(rhs) > 0;
+}
+
+int operator >= (const Rational& lhs, long rhs) {
+	return lhs.cmp(rhs) >= 0;
+}
+
+Rational abs(const Rational& x) {
+	Rational r(x.numerator()<0?(-x.numerator()):x.numerator(),x.denominator()<0?(-x.denominator()):x.denominator());
 }

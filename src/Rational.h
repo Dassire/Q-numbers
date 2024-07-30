@@ -3,8 +3,8 @@
 
 class Rational {
 private:
-	int m_num;
-	int m_den;
+	long m_num;
+	long m_den;
 
 public:
 	Rational(int num, int den);
@@ -19,6 +19,7 @@ public:
 	char* toString();
 
 	int cmp(const Rational&) const;
+	int cmp(long) const;
 	Rational& add(const Rational&);
 	Rational& sub(const Rational&);
 	// ?
@@ -30,6 +31,12 @@ public:
 	Rational& operator -= (const Rational&);
 	Rational& operator *= (const Rational&);
 	Rational& operator /= (const Rational&);
+
+	Rational& operator  = (long);
+	Rational& operator += (long);
+	Rational& operator -= (long);
+	Rational& operator *= (long);
+	Rational& operator /= (long);
 
 };
 
@@ -45,5 +52,14 @@ int operator <  (const Rational&, const Rational&);
 int operator <= (const Rational&, const Rational&);
 int operator >  (const Rational&, const Rational&);
 int operator >= (const Rational&, const Rational&);
+
+int operator == (const Rational&, long);
+int operator != (const Rational&, long);
+int operator <  (const Rational&, long);
+int operator <= (const Rational&, long);
+int operator >  (const Rational&, long);
+int operator >= (const Rational&, long);
+
+Rational abs(const Rational&) ;
 
 #endif
