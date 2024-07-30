@@ -8,6 +8,15 @@
 typedef int idx;
 
 template <class T>
+T* array_copy(T* dest, T* src, idx size) {
+	int i;
+	for(i = 0; i < size ; i++) {
+		dest[i] = src[i];
+	}
+	return dest;
+}
+
+template <class T>
 class Matrix {
 	private:
 	idx m_m;
@@ -47,9 +56,9 @@ class Matrix {
 		if(desalloc) {
 			buff = new T[m_n];
 		}
-		memcpy(buff, &(m_data[m_n * i1]), sizeof(T) * m_n);
-		memcpy(&(m_data[m_n * i1]), &(m_data[m_n * i2]), sizeof(T) * m_n);
-		memcpy(&(m_data[m_n * i2]), buff, sizeof(T) * m_n);
+		array_copy(buff, &(m_data[m_n * i1]), m_n);
+		array_copy(&(m_data[m_n * i1]), &(m_data[m_n * i2]), m_n);
+		array_copy(&(m_data[m_n * i2]), buff, m_n);
 		if(desalloc) {
 			delete[] buff;
 		}
@@ -72,7 +81,7 @@ public:
 		m_m = oth.getM();
 		m_n = oth.getN();
 		m_data = new T[m_m * m_n];
-		memcpy(m_data, oth.m_data, sizeof(T) * m_m * m_n);
+		array_copy(m_data, oth.m_data, m_m * m_n);
 	}
 
 	~Matrix() {
@@ -101,7 +110,7 @@ public:
 			delete[] m_data;
 			m_data = new T[nsize];
 		}
-		memcpy(m_data, oth.m_data, sizeof(T) * nsize);
+		array_copy(m_data, oth.m_data, nsize);
 		m_m = oth.getM();
 		m_n = oth.getN();
 		return *this;
