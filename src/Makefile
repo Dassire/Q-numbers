@@ -1,8 +1,8 @@
 #CFLAGS = -g -Wall -Wextra -pedantic -Wno-unused-parameter
-CFLAGS = -Wno-unused-parameter -Wall
+CFLAGS = -Wno-unused-parameter -Wall -g
 CC = g++
 
-LIB = PGCD.o Rational.o
+LIB = PGCD.o Rational.o IntMatrixUtils.o
 PROGRAMS = testRational testPGCD testMatrix testEchelon
 
 
@@ -15,19 +15,22 @@ clean:
 
 
 PGCD.o: PGCD.c PGCD.h
-	$(CC) $(GCC_FLAGS) -c PGCD.c
-
-testPGCD: PGCD.o testPGCD.c
-	$(CC)  $(CFLAGS) -g -o testPGCD PGCD.o testPGCD.c
+	$(CC) $(CFLAGS) -c PGCD.c
 
 Rational.o: Rational.cpp Rational.h
-	$(CC) $(GCC_FLAGS) -c Rational.cpp
+	$(CC) $(CFLAGS) -c Rational.cpp
+
+IntMatrixUtils.o: IntMatrixUtils.cpp IntMatrixUtils.h
+	$(CC) $(CFLAGS) -c IntMatrixUtils.cpp
+
+testPGCD: PGCD.o testPGCD.c
+	$(CC)  $(CFLAGS) -o testPGCD PGCD.o testPGCD.c
 
 testRational: Rational.o PGCD.o testRational.c
-	$(CC) $(CFLAGS) -g -o testRational Rational.o PGCD.o testRational.c
+	$(CC) $(CFLAGS)  -o testRational Rational.o PGCD.o testRational.c
 
 testMatrix: Matrix.h testMatrix.cpp
-	$(CC) $(CFLAGS) -g -o testMatrix testMatrix.cpp
+	$(CC) $(CFLAGS) -o testMatrix testMatrix.cpp
 
-testEchelon: Matrix.h testEchelon.cpp
-	$(CC) $(CFLAGS) -g -o testEchelon testEchelon.cpp
+testEchelon: testEchelon.cpp Matrix.h IntMatrixUtils.o
+	$(CC) $(CFLAGS) -o testEchelon testEchelon.cpp IntMatrixUtils.o
