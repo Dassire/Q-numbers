@@ -152,18 +152,21 @@ public:
         }
     }
 
-    /*
     Matrix<T> echelon(Matrix<T>* oth) {
         Matrix<T> r(*this);
         r.m_data = new T[m_m * m_n];
         int i,j,k;
-        for(i=0; i < m_m; i++) { // m_n - 1 ?
-            for(k=i + 1; k< m_n; k++) {
-
+        T coef;
+        for(i=0; i < m_m - 1; i++) { // m_n ?
+            for(k=i + 1; k < m_m; k++) {
+                coef = r.get(k,i)/r.get(i,i);
+                for(j = i; j < m_n; j++) {
+                    r.set(k,j,r.get(k,j) - coef * r.get(i,j));
+                }
             }
         }
+        return r;
     }
-    */
 };
 
 #endif
