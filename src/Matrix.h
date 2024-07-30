@@ -10,14 +10,15 @@ class Matric : Dim2Array<int>
 */
 
 #include <string>
+#include <string.h>
 
-typedef int index;
+typedef int idx;
 
 template <class T>
 class Matrix {
     private:
-    index m_m;
-    index m_n;
+    idx m_m;
+    idx m_n;
     T* m_data;
 
     T* prod(const Matrix<T>* oth) const {
@@ -35,13 +36,13 @@ class Matrix {
     }
 
 public:
-    Matrix(index m, index n) {
+    Matrix(idx m, idx n) {
         m_m=m;
         m_n=n;
         m_data=new T[m*n];
     }
 
-    Matrix(index m, index n, T* data) {
+    Matrix(idx m, idx n, T* data) {
         m_m = m;
         m_n = n;
         m_data = data;
@@ -51,7 +52,7 @@ public:
         delete[] m_data;
     }
 
-    T get(index i, index j) const {
+    T get(idx i, idx j) const {
         if (i<m_m && j<m_n) {
             return m_data[i * m_n + j];
         } else {
@@ -59,19 +60,31 @@ public:
         }
     }
 
-    index getM() const { return m_m; }
-    index getN() const { return m_n; }
+    idx getM() const { return m_m; }
+    idx getN() const { return m_n; }
 
-    Matrix<T>& set(index i, index j, T val) {
+    Matrix<T>& set(idx i, idx j, T val) {
         m_data[i * m_n + j] = val;
         return *this;
     }
+
+	Matrix<T>& operator = (const Matrix<T>& oth) {
+		int nsize = oth.getM() * oth.getN();
+		if(m_m * m_n != nsize) {
+			delete[] m_data;
+			m_data = new T[nsize];
+		}
+		// memccpy(m_data, oth.m_data, sizeof(T) * nsize);
+		m_m = oth.getM();
+		m_n = oth.getN();
+		return *this;
+	}
 
     Matrix<T>& operator += (const Matrix<T>& oth) {
         int i;
         if(m_m == oth.getM() && m_n == oth.getN()) {
             for(i=0; i<m_m * m_n; i++) {
-                index tmp = oth.m_data[i];
+                idx tmp = oth.m_data[i];
                 m_data[i]+=tmp;
             }
         } else {
@@ -116,6 +129,8 @@ public:
 			}
 			r.m_data = dat;
 			return r;
+		} else {
+			exit(1);
 		}
 	}
 
@@ -135,8 +150,8 @@ public:
 
 /*
 Matrix<T> operator + (const Matrix<T>& l, const Matrix<T>& r) {
-    index i=0;
-    T* data = new T[m_n]{ ([](index* i){l->}) };
+    idx i=0;
+    T* data = new T[m_n]{ ([](idx* i){l->}) };
     return 0;
 }
 */

@@ -10,7 +10,7 @@ int main (int c, char** v) {
         }
     }
     printf("\n");
-    M+=M;
+    M= M + M;
     for(int i = 0; i < M.getM(); i++) {
         for(int j = 0; j < M.getN(); j++) {
             printf("%d,%d : %d\n", i,j, M.get(i,j));
