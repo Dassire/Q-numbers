@@ -182,7 +182,6 @@ public:
         T coef;
         T* buff = new T[oth && oth->getN() > m_n ? oth->getN() : m_n];
         int i,j,k;
-        r.m_data = new T[m_m * m_n];
         for(i=0; i < m_m - 1; i++) { // m_n ?
             k = min_nonzero(i, i);
             if(k!=i) {
@@ -191,6 +190,7 @@ public:
                     oth->swap(i, k, buff);
                 }
             }
+            if(r.get(i,i) == 0) continue;
             for(k=i + 1; k < m_m; k++) {
                 coef = r.get(k,i)/r.get(i,i);
                 for(j = i; j < m_n; j++) {
