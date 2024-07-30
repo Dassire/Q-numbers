@@ -35,6 +35,30 @@ class Matrix {
         return r;
     }
 
+    idx min_nonzero(idx i, idx j) {
+        idx r;
+        r = 0;
+        for(; i < m_m; i++) {
+            if(abs(get(i,j)) < abs(get(r,j))) {
+                r = i;
+            }
+        }
+        return r;
+    }
+
+    void swap(idx i1, idx i2, T* buff) {
+        bool desalloc = buff == NULL;
+        if(desalloc) {
+            buff = new T[m_n];
+        }
+        memcpy(buff, &(m_data[m_n * i1]), sizeof(T) * m_n);
+        memcpy(&(m_data[m_n * i1]), &(m_data[m_n * i2]), sizeof(T) * m_n);
+        memcpy(&(m_data[m_n * i2]), buff, sizeof(T) * m_n);
+        if(desalloc) {
+            delete[] buff;
+        }
+    }
+
 public:
     Matrix(idx m, idx n, T* data) {
         m_m = m;
@@ -155,16 +179,25 @@ public:
     Matrix<T> echelon(Matrix<T>* oth) {
         Matrix<T> r(*this);
         r.m_data = new T[m_m * m_n];
+        T* buff = new T[oth && oth->getN() > m_n ? oth->getN() : m_n];
         int i,j,k;
         T coef;
         for(i=0; i < m_m - 1; i++) { // m_n ?
+            k = min_nonzero(i, i);
+            if(k!=i) {
+                swap(i, k, buff);
+                if(oth) {
+                    oth.swap(i, k, buff);
+                }
+            }
             for(k=i + 1; k < m_m; k++) {
                 coef = r.get(k,i)/r.get(i,i);
                 for(j = i; j < m_n; j++) {
-                    r.set(k,j,r.get(k,j) - coef * r.get(i,j));
+                    r.set(k,j, r.get(k,j) - coef * r.get(i,j));
                 }
             }
         }
+        delete[] buff;
         return r;
     }
 };
