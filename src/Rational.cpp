@@ -73,8 +73,8 @@ char* Rational::toString() {
 
 	r=new char[2+strlen(top)+strlen(bot)]; // 2 for / and \0
 	sprintf(r, "%s/%s", top, bot);
-	delete top;
-	delete bot;
+	delete[] top;
+	delete[] bot;
 	return r;
 }
 
@@ -137,29 +137,34 @@ void Rational::simplify() {
 	m_num/=gcd;
 }
 
-void Rational::operator =  (const Rational& right) {
+Rational& Rational::operator =  (const Rational& right) {
 	m_num=right.m_num; // .copy();
 	m_den=right.m_den;
+	return *this;
 }
 
-void Rational::operator += (const Rational& right) {
+Rational& Rational::operator += (const Rational& right) {
 	add(right);
+	return *this;
 }
 
-void Rational::operator -= (const Rational& right) {
+Rational& Rational::operator -= (const Rational& right) {
 	sub(right);
+	return *this;
 }
 
-void Rational::operator *= (const Rational& right) {
+Rational& Rational::operator *= (const Rational& right) {
 	m_num*=right.m_num;
 	m_den*=right.m_den;
+	return *this;
 }
 
-void Rational::operator /= (const Rational& right) {
+Rational& Rational::operator /= (const Rational& right) {
 	int tmp=right.m_num; // in case of right===this
 	if(right.m_num==0) { exit(1); }
 	m_num*=right.m_den;
 	m_den*=tmp;
+	return *this;
 }
 
 Rational operator + (const Rational& left, const Rational& right) {

@@ -137,7 +137,7 @@ public:
     Matrix<T> operator * (const Matrix<T>& oth) {
         T* dat;
 		Matrix<T> r(oth);
-        if(m_n == oth.getM()) {
+        if(m_n == r.getM()) {
             dat = r.prod(this);
             r.m_m = m_n;
             r.m_data = dat;
@@ -147,13 +147,5 @@ public:
         }
     }
 };
-
-/*
-Matrix<T> operator + (const Matrix<T>& l, const Matrix<T>& r) {
-    idx i=0;
-    T* data = new T[m_n]{ ([](idx* i){l->}) };
-    return 0;
-}
-*/
 
 #endif

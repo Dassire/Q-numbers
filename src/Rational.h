@@ -25,11 +25,11 @@ public:
 	void simplify();
 
 	// Rational* ?
-	void operator  = (const Rational&);
-	void operator += (const Rational&);
-	void operator -= (const Rational&);
-	void operator *= (const Rational&);
-	void operator /= (const Rational&);
+	Rational& operator  = (const Rational&);
+	Rational& operator += (const Rational&);
+	Rational& operator -= (const Rational&);
+	Rational& operator *= (const Rational&);
+	Rational& operator /= (const Rational&);
 
 };
 
