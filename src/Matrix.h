@@ -31,9 +31,11 @@ class Matrix {
 	idx min_nonzero(idx i, idx j) {
 		idx r;
 		r = i;
+		// printf("j=%d\n", j);
 		for(; i < m_m; i++) {
+			// printf("(r=%d,j)=%d, (i=%d,j)=%d\n", r, get(r,j), i, get(i,j));
 			if((get(r,j) == 0 && get(i,j) != 0) // get to the first non zero
-					|| (get(r,j) != 0 && abs(get(i,j)) < abs(get(r,j)))) {
+					|| (get(i,j) != 0 && abs(get(i,j)) < abs(get(r,j)))) {
 				r = i;
 			}
 		}
@@ -170,7 +172,7 @@ public:
 		}
 	}
 
-	/*
+	
 	void printMatrix() {
 		int i,j;
 		for(i = 0; i < getM(); i++) {
@@ -180,7 +182,7 @@ public:
 			printf("\n");
 		}
 	}
-	*/
+	
 
 	Matrix<T> echelon(Matrix<T>* oth) {
 		Matrix<T> r(*this);
@@ -188,7 +190,7 @@ public:
 		T* buff = new T[oth && oth->getN() > m_n ? oth->getN() : m_n];
 		int i,j,k;
 		for(i=0; i < m_m - 1; i++) { // m_n ?
-			k = min_nonzero(i, i);
+			k = r.min_nonzero(i, i);
 			// printf("i = %d, k = %d\n", i, k);
 			if(k!=i) {
 				r.swap(i, k, buff);

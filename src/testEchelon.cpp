@@ -11,5 +11,7 @@ int main(int c, char** v) {
 	printMatrix(M2);
 	printf("\n");
 	printMatrix(M3);
+	printf("\n");
+	printMatrix(M2 * M3);
 	return 0;
 }
