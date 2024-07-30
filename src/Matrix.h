@@ -28,7 +28,7 @@ class Matrix {
 		return r;
 	}
 
-	idx min_nonzero(idx i, idx j) {
+	idx min_nonzero(idx i, idx j) const {
 		idx r;
 		r = i;
 		// printf("j=%d\n", j);
@@ -184,7 +184,7 @@ public:
 	}
 	
 
-	Matrix<T> echelon(Matrix<T>* oth) {
+	Matrix<T> echelon(Matrix<T>* oth) const {
 		Matrix<T> r(*this);
 		T coef;
 		T* buff = new T[oth && oth->getN() > m_n ? oth->getN() : m_n];
