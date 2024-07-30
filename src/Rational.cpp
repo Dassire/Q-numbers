@@ -269,4 +269,5 @@ int operator >= (const Rational& lhs, long rhs) {
 
 Rational abs(const Rational& x) {
 	Rational r(x.numerator()<0?(-x.numerator()):x.numerator(),x.denominator()<0?(-x.denominator()):x.denominator());
+	return r;
 }
