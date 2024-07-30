@@ -23,6 +23,9 @@ int main(int argc, char const *argv[]) {
 	str=(x3 - x1 * x2).toString();
 	printf("%s\n", str);
 	delete[] str;
+	str=(x3 - x1 * x2).simplify().toString();
+	printf("%s\n", str);
+	delete[] str;
 	printf("%d\n", x2.cmp(x1));
 	return 0;
 }
