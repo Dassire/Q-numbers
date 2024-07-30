@@ -178,10 +178,10 @@ public:
 
     Matrix<T> echelon(Matrix<T>* oth) {
         Matrix<T> r(*this);
-        r.m_data = new T[m_m * m_n];
+        T coef;
         T* buff = new T[oth && oth->getN() > m_n ? oth->getN() : m_n];
         int i,j,k;
-        T coef;
+        r.m_data = new T[m_m * m_n];
         for(i=0; i < m_m - 1; i++) { // m_n ?
             k = min_nonzero(i, i);
             if(k!=i) {
@@ -194,6 +194,11 @@ public:
                 coef = r.get(k,i)/r.get(i,i);
                 for(j = i; j < m_n; j++) {
                     r.set(k,j, r.get(k,j) - coef * r.get(i,j));
+                }
+                if(oth) {
+                    for(j = 0; j < oth->getN(); j++) {
+                        oth->set(k,j, oth->get(k,j) - coef * oth->get(i,j));
+                    }
                 }
             }
         }
