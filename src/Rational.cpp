@@ -95,22 +95,24 @@ int Rational::cmp(const Rational& right) const {
 	return (lnum*(rden/gcd))-((lden/gcd)*rnum);
 }
 
-void Rational::add(const Rational& right) {
+Rational& Rational::add(const Rational& right) {
 	if(m_den!=right.m_den) { // can't be the same object
 		m_num=(m_num*right.m_den)+(m_den*right.m_num);
 		m_den*=right.m_den;
 	} else {
 		m_num+=right.m_num;
 	}
+	return *this;
 }
 
-void Rational::sub(const Rational& right) {
+Rational& Rational::sub(const Rational& right) {
 	if(m_den!=right.m_den) { // can't be the same object
 		m_num=(m_num*right.m_den)-(m_den*right.m_num);
 		m_den*=right.m_den;
 	} else {
 		m_num-=right.m_num;
 	}
+	return *this;
 }
 
 /* // Other :
@@ -123,7 +125,7 @@ void Rational::sub(const Rational& right) {
 
  */
 
-void Rational::simplify() {
+Rational& Rational::simplify() {
 	int gcd;
 
 	if(m_den<0) {
@@ -135,6 +137,7 @@ void Rational::simplify() {
 	gcd=PGCD(m_num, m_den, NULL, NULL);
 	m_den/=gcd;
 	m_num/=gcd;
+	return *this;
 }
 
 Rational& Rational::operator =  (const Rational& right) {

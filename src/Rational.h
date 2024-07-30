@@ -19,10 +19,10 @@ public:
 	char* toString();
 
 	int cmp(const Rational&) const;
-	void add(const Rational&);
-	void sub(const Rational&);
+	Rational& add(const Rational&);
+	Rational& sub(const Rational&);
 	// ?
-	void simplify();
+	Rational& simplify();
 
 	// Rational* ?
 	Rational& operator  = (const Rational&);
