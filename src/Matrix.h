@@ -28,7 +28,7 @@ class Matrix {
             for(j = 0; j < m_n; j++) {
                 r[i * oth->getM() + j]=0;
                 for(k=0;k<m_m;k++) {
-                    r[i * oth->getM() + j]+=oth->get(i,k)*get(k,j);
+                    r[i * oth->getN() + j]+=oth->get(i,k)*get(k,j);
                 }
             }
         }
@@ -36,16 +36,23 @@ class Matrix {
     }
 
 public:
+    Matrix(idx m, idx n, T* data) {
+        m_m = m;
+        m_n = n;
+        m_data = data;
+    }
+
     Matrix(idx m, idx n) {
         m_m=m;
         m_n=n;
         m_data=new T[m*n];
     }
 
-    Matrix(idx m, idx n, T* data) {
-        m_m = m;
-        m_n = n;
-        m_data = data;
+    Matrix(const Matrix<T>& oth) {
+        m_m = oth.getM();
+        m_n = oth.getN();
+        m_data = new T[m_m * m_n];
+        memcpy(m_data, oth.m_data, sizeof(T) * m_m * m_n);
     }
 
     ~Matrix() {
@@ -119,15 +126,12 @@ public:
     }
 
 	Matrix<T> operator + (const Matrix<T>& oth) {
-		T* dat;
 		Matrix<T> r(oth);
 		int i;
 		if(m_m == oth.getM() && m_n == oth.getN()) {
-			dat = new T[m_m * m_n];
 			for(i = 0; i < m_m * m_n; i++) {
-				dat[i] = m_data[i] + oth.m_data[i];
+				r.m_data[i] = m_data[i] + oth.m_data[i];
 			}
-			r.m_data = dat;
 			return r;
 		} else {
 			exit(1);
@@ -139,6 +143,7 @@ public:
 		Matrix<T> r(oth);
         if(m_n == r.getM()) {
             dat = r.prod(this);
+            delete[] r.m_data;
             r.m_m = m_n;
             r.m_data = dat;
             return r;
@@ -146,6 +151,19 @@ public:
             exit(1);
         }
     }
+
+    /*
+    Matrix<T> echelon(Matrix<T>* oth) {
+        Matrix<T> r(*this);
+        r.m_data = new T[m_m * m_n];
+        int i,j,k;
+        for(i=0; i < m_m; i++) { // m_n - 1 ?
+            for(k=i + 1; k< m_n; k++) {
+
+            }
+        }
+    }
+    */
 };
 
 #endif
