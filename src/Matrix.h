@@ -74,7 +74,7 @@ public:
 			delete[] m_data;
 			m_data = new T[nsize];
 		}
-		// memccpy(m_data, oth.m_data, sizeof(T) * nsize);
+		memcpy(m_data, oth.m_data, sizeof(T) * nsize);
 		m_m = oth.getM();
 		m_n = oth.getN();
 		return *this;
