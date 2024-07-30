@@ -2,7 +2,7 @@
 CFLAGS = -Wno-unused-parameter -Wall -g
 CC = g++
 
-LIB = PGCD.o Rational.o IntMatrixUtils.o
+LIB = PGCD.o Rational.o IntMatrixUtils.o RationalMatrixUtils.o
 PROGRAMS = testRational testPGCD testMatrix testEchelon
 
 
@@ -22,6 +22,9 @@ Rational.o: Rational.cpp Rational.h
 
 IntMatrixUtils.o: IntMatrixUtils.cpp IntMatrixUtils.h
 	$(CC) $(CFLAGS) -c IntMatrixUtils.cpp
+
+RationalMatrixUtils.o: RationalMatrixUtils.cpp RationalMatrixUtils.h
+	$(CC) $(CFLAGS) -c RationalMatrixUtils.cpp
 
 testPGCD: PGCD.o testPGCD.c
 	$(CC)  $(CFLAGS) -o testPGCD PGCD.o testPGCD.c
