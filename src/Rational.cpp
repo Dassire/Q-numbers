@@ -176,6 +176,7 @@ Rational& Rational::operator /= (const Rational& right) {
 
 Rational& Rational::operator  = (long oth) {
 	m_num = oth;
+	m_den = 1;
 	return *this;
 }
 Rational& Rational::operator += (long oth) {
