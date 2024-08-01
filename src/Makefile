@@ -23,7 +23,7 @@ Rational.o: Rational.cpp Rational.h
 IntMatrixUtils.o: IntMatrixUtils.cpp IntMatrixUtils.h
 	$(CC) $(CFLAGS) -c IntMatrixUtils.cpp
 
-RationalMatrixUtils.o: RationalMatrixUtils.cpp RationalMatrixUtils.h
+RationalMatrixUtils.o: RationalMatrixUtils.cpp RationalMatrixUtils.h Rational.o
 	$(CC) $(CFLAGS) -c RationalMatrixUtils.cpp
 
 testPGCD: PGCD.o testPGCD.c
