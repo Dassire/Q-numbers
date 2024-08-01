@@ -197,9 +197,18 @@ public:
 		Matrix<T> r(*this);
 		T coef;
 		T* buff = new T[oth && oth->getN() > m_n ? oth->getN() : m_n];
-		int i,j,k;
-		for(i=0; i < m_m - 1; i++) { // m_n ?
-			k = r.min_nonzero(i, i);
+		int i,j,k; // add a counter for the col with non null
+		idx l;
+		for(i=0, l = 0; (i < (m_m - 1)) && (l < m_n); i++, l++) { // m_n ?
+			// Get to the first column without 0s
+			do {
+				k = i;
+				while(k < m_m && r.get(k,l) == 0) k++;
+				if(r.get(k,l) == 0) l++;
+			} while(l < m_n && r.get(k,l) == 0);
+			if(l >= m_n) break; // only 0s
+			// maybe merge
+			k = r.min_nonzero(i, l);
 			// printf("i = %d, k = %d\n", i, k);
 			if(k!=i) {
 				r.swap(i, k, buff);
@@ -207,10 +216,12 @@ public:
 					oth->swap(i, k, buff);
 				}
 			}
-			if(r.get(i,i) == 0) continue;
+			if(r.get(i,l) == 0) continue;
 			for(k=i + 1; k < m_m; k++) {
-				coef = r.get(k,i)/r.get(i,i);
-				for(j = i; j < m_n; j++) {
+				j = l;
+				/* while(j < r.getN() && r.get(i,j) != 0) j++; */
+				coef = r.get(k,l)/r.get(i,l);
+				for(; j < m_n; j++) {
 					r.set(k,j, r.get(k,j) - coef * r.get(i,j));
 				}
 				if(oth) {
@@ -219,12 +230,27 @@ public:
 					}
 				}
 			}
+			// printf("%d,%d\n", i, l);
 			// r.printMatrix();
 			// printf("\n");
 		}
-		printf("\n");
+		// printf("\n");
 		delete[] buff;
 		return r;
+	}
+
+	Matrix<T> gaussian_elimination(Matrix<T>* oth) {
+		Matrix<T> r=echelon(oth);
+		T coef;
+		int i,j,k;
+		for(i = r.getM() - 1; i >= 0; i --) {
+			j = i;
+			while(j < r.getN() && r.get(i,j) != 0) j++;
+			if(r.get(i,j) == 0) continue;
+			for(k = 0; k < i; k++) {
+				coef = r.get(k,j)/r.get(i,j);
+			}
+		}
 	}
 };
 
