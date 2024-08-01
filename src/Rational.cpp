@@ -133,7 +133,7 @@ Rational& Rational::simplify() {
 	int gcd;
 
 	if(m_den<0) {
-		if(m_den==0) exit(1);
+		if(m_den==0) { fprintf(stderr, "Null denominator : %ld/%ld", m_num, m_den); exit(1); }
 		m_den= -m_den;
 		m_num= -m_num;
 	}
@@ -168,7 +168,7 @@ Rational& Rational::operator *= (const Rational& right) {
 
 Rational& Rational::operator /= (const Rational& right) {
 	int tmp=right.m_num; // in case of right===this
-	if(right.m_num==0) { exit(1); }
+	if(right.m_num==0) { fprintf(stderr, "Divide by 0 : %d/%d\n", right.numerator(), right.denominator()); exit(1); }
 	m_num*=right.m_den;
 	m_den*=tmp;
 	return *this;
