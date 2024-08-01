@@ -64,6 +64,20 @@ class Matrix {
 		}
 	}
 
+
+	void Rprint() {
+		int i,j;
+		char* str;
+		for(i = 0; i < m_m; i++) {
+			for(j = 0; j < m_n; j++) {
+				str = get(i,j).simplify().toString();
+				printf("%s\t", str);
+				delete[] str;
+			}
+			printf("\n");
+		}
+	}
+
 public:
 	Matrix(idx m, idx n, T* data) {
 		m_m = m;
@@ -92,6 +106,7 @@ public:
 		if (i<m_m && j<m_n) {
 			return m_data[i * m_n + j];
 		} else {
+			fprintf(stderr, "get error : %d < %d or %d < %d\n", i, m_m, j, m_n);
 			exit(1);
 		}
 	}
@@ -124,6 +139,7 @@ public:
 				m_data[i]+=tmp;
 			}
 		} else {
+			fprintf(stderr, "Matrix addition assign error");
 			exit(1);
 		}
 		return *this;
@@ -136,6 +152,7 @@ public:
 				m_data[i]-=oth.m_data[i];
 			}
 		} else {
+			fprintf(stderr, "Matrix sub assign error");
 			exit(1);
 		}
 		return *this;
@@ -149,6 +166,7 @@ public:
 			m_data = tmp;
 			m_n = oth.getN();
 		} else {
+			fprintf(stderr, "Matrix product assign error");
 			exit(1);
 		}
 		return *this;
@@ -163,6 +181,7 @@ public:
 			}
 			return r;
 		} else {
+			fprintf(stderr, "Matrix addition error");
 			exit(1);
 		}
 	}
@@ -177,6 +196,7 @@ public:
 			r.m_data = dat;
 			return r;
 		} else {
+			fprintf(stderr, "Matrix product error");
 			exit(1);
 		}
 	}
@@ -241,16 +261,72 @@ public:
 
 	Matrix<T> gaussian_elimination(Matrix<T>* oth) {
 		Matrix<T> r=echelon(oth);
-		T coef;
-		int i,j,k;
+		T zero, one;
+		int i,j,k,l;
+		zero = 0;
+		one = 1;
+		/*
+		r.Rprint();
+		if(oth) {
+			printf("\n");
+			oth->Rprint();
+		}
+		printf("\n\n");
+		 */
 		for(i = r.getM() - 1; i >= 0; i --) {
 			j = i;
-			while(j < r.getN() && r.get(i,j) != 0) j++;
-			if(r.get(i,j) == 0) continue;
-			for(k = 0; k < i; k++) {
-				coef = r.get(k,j)/r.get(i,j);
+			while(j < r.getN() && r.get(i,j) == 0) j++;
+			// fprintf(stderr, "%d < %d\n", j, r.getN());
+			if(j >= r.getN()) continue;
+			// fprintf(stderr, "%d < %d : true && %s != 0\n", j, r.getN(), r.get(i,j).toString());
+			// printf("line\n");
+
+			// Divide the line
+			for(l = j + 1; l < r.getN(); l++) {
+				// fprintf(stderr, "1 : %d/%d\n", r.get(i,j).numerator(),r.get(i,j).numerator());
+				// fprintf(stderr, "%s\n", r.get(i,l).toString());
+				r.set(i,l, r.get(i,l) / r.get(i,j));
+				// fprintf(stderr, "%s\n", r.get(i,l).toString());
 			}
+			// r.Rprint();
+			// printf("\n");
+			if(oth) {
+				for(l = 0; l < oth->getN(); l++) {
+					// fprintf(stderr, "2 : %d/%d\n", r.get(i,j).numerator(),r.get(i,j).numerator());
+					oth->set(i,l, oth->get(i,l) / r.get(i,j));
+					// r.Rprint();
+					// printf("\n");
+				}
+			}
+			// oth->Rprint(); printf("\n\n");
+
+			for(k = 0; k < i; k++) {
+				// coef = r.get(k,j) / r.get(i,j);
+				for(l = j + 1; l < r.getN(); l++) {
+					// printf("%d,%d : %s - (%s * %s) = %s\n", k, l, r.get(k,l).toString(), r.get(i,l).toString(), r.get(k,j).toString(), (r.get(k,l) - (r.get(il) * r.get(k,j))).toString());
+					r.set(k,l, r.get(k,l) - (r.get(i,l) * r.get(k,j)));
+				}
+				if(oth) {
+					for(l = 0; l < oth->getN(); l++) {
+						// printf("%d,%d : %s - (%s * %s) = %s\n", k, l, oth->get(k,l).toString(), oth->get(i,l).toString(), r.get(k,j).toString(), (oth->get(k,l) - (oth->get(i,l) * r.get(k,j))).toString());
+						oth->set(k,l, oth->get(k,l) - (oth->get(i,l) * r.get(k,j)));
+						// oth->Rprint(); printf("\n");
+					}
+				}
+				r.set(k,j, zero);
+			}
+			// fprintf(stderr, "3 : %d/%d\n", r.get(i,j).numerator(),r.get(i,j).numerator());
+			r.set(i,j, one);
+			/*
+			r.Rprint();
+			if(oth) {
+				printf("\n");
+				oth->Rprint();
+			}
+			printf("\n\n");
+			 */
 		}
+		return r;
 	}
 };
 
