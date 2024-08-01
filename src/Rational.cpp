@@ -199,24 +199,28 @@ Rational& Rational::operator /= (long oth) {
 Rational operator + (const Rational& left, const Rational& right) {
 	Rational r(left);
 	r.add(right);
+	r.simplify();
 	return r;
 }
 
 Rational operator - (const Rational& left, const Rational& right) {
 	Rational r(left);
 	r.sub(right);
+	r.simplify();
 	return r;
 }
 
 Rational operator * (const Rational& left, const Rational& right) {
 	Rational r(left);
 	r*=right;
+	r.simplify();
 	return r;
 }
 
 Rational operator / (const Rational& left, const Rational& right) {
 	Rational r(left);
 	r/=right;
+	r.simplify();
 	return r;
 }
 
