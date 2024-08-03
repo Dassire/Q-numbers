@@ -224,8 +224,8 @@ public:
 			do {
 				k = i;
 				while(k < m_m && r.get(k,l) == 0) k++;
-				if(r.get(k,l) == 0) l++;
-			} while(l < m_n && r.get(k,l) == 0);
+				if(k >= m_m || r.get(k,l) == 0) l++;
+			} while(l < m_n && ((k < m_m && r.get(k,l) == 0) || !(k < m_m)));
 			if(l >= m_n) break; // only 0s
 			// maybe merge
 			k = r.min_nonzero(i, l);
